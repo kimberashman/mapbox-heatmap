@@ -17,3 +17,4 @@ Note: API key has been removed
 
 References 
 [1] Hoen, B.D., Diffendorfer, J.E., Rand, J.T., Kramer, L.A., Garrity, C.P., and Hunt, H.E., 2018, United States Wind Turbine Database (v4.1, July 21, 2021): U.S. Geological Survey, American Clean Power Association, and Lawrence Berkeley National Laboratory data release, https://doi.org/10.5066/F7TX3DN0.
+[2] https://docs.mapbox.com/help/tutorials/make-a-heatmap-with-mapbox-gl-js/
