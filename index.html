@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Wind turbine map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
+    <link
+            href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css"
+            rel="stylesheet"
+    />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .marker {
+            background-image: url('wt-icon.png');
+            background-size: cover;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .mapboxgl-popup {
+            max-width: 200px;
+            max-height: 200px;
+        }
+
+        .mapboxgl-popup-content {
+            text-align: center;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+    mapboxgl.accessToken = ' '; //REPLACE WITH KEY
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: ' ', //REPLACE 
+        center: [-95, 37],
+        zoom: 4
+    });
+
+    map.on('load', function() {
+
+        map.addSource('wt', {
+            'type': 'geojson',
+            'data': './wtdb.geojson',
+            'generateId': true // This ensures that all features have unique IDs
+        });
+
+        map.addLayer(
+            {
+                'id': 'wt-heat',
+                'type': 'heatmap',
+                'source': 'wt',
+                'maxzoom': 15,
+                'paint': {
+// increase intensity as zoom level increases
+                    'heatmap-intensity': {
+                        'stops': [
+                            [6, 1],
+                            [8, 3]
+                        ]
+                    },
+// use sequential color palette to use exponentially as the weight increases
+                    'heatmap-color': [
+                        'interpolate',
+                        ['linear'],
+                        ['heatmap-density'],
+                        0,
+                        'rgba(236,222,239,0)',
+                        0.2,
+                        'rgb(134,158,188)',
+                        0.4,
+                        'rgb(168,208,139)',
+                        0.6,
+                        'rgb(196,155,123)',
+                        0.8,
+                        'rgb(155,72,81)'
+                    ],
+// increase radius as zoom increases
+                    'heatmap-radius': {
+                        'stops': [
+                            [11, 15],
+                            [15, 20]
+                        ]
+                    },
+// decrease opacity to transition into the circle layer
+                    'heatmap-opacity': {
+                        'default': 0.8,
+                        'stops': [
+                            [14, 1],
+                            [15, 0]
+                        ]
+                    }
+                }
+            },
+        );
+
+        map.addLayer(
+            {
+                'id': 'wt-point',
+                'type': 'circle',
+                'source': 'wt',
+                'minzoom': 8,
+            },
+        );
+    });
+
+    map.on('click', 'wt-point', function (e) {
+        new mapboxgl.Popup()
+            .setLngLat(e.features[0].geometry.coordinates)
+            .setHTML('<b>Year:</b> ' + e.features[0].properties.p_year + "<br />"+
+                '<b>Manufacturer:</b> ' + e.features[0].properties.t_manu )
+            .addTo(map);
+    });
+
+</script>
+</body>
+</html>
