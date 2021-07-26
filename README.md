@@ -10,3 +10,5 @@ You will need:
 * mapbox gl 
 
 Please install them if you don't have them already.
+
+Note: API key has been removed
