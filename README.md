@@ -1,6 +1,6 @@
 # mapbox-heatmap
 
-This map shows a heatmap of wind turbines in the US. Markers can be clicked to see year and manufacturer, when zoomed in. 
+[This map](https://kimberashman.com/projects/wt-map/index.html) shows a heatmap of wind turbines in the US. Markers can be clicked to see year and manufacturer, when zoomed in. 
 
 
 Data source: 
